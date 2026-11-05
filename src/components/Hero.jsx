@@ -67,7 +67,7 @@ export default function Hero() {
   return (
     <section id="home" className="relative min-h-[88vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#102B46]">
       {/* Background Images with AnimatePresence */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -76,6 +76,7 @@ export default function Hero() {
             exit={{ opacity: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="absolute inset-0"
+            style={{ position: "absolute", inset: 0 }}
           >
             <Image
               src={activeSlideData.image}
@@ -83,6 +84,7 @@ export default function Hero() {
               fill
               priority
               className="object-cover object-center"
+              style={{ objectFit: "cover", objectPosition: "center" }}
               sizes="100vw"
             />
           </motion.div>

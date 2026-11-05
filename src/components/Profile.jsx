@@ -115,13 +115,17 @@ export default function Profile() {
 
           {/* Right Column: High Quality Image & Feature Highlights */}
           <div className="lg:col-span-5 flex flex-col space-y-4 sm:space-y-6">
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200 aspect-[16/10] sm:aspect-[4/3] lg:aspect-[4/5] group">
+            <div 
+              className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200 aspect-[16/10] sm:aspect-[4/3] lg:aspect-[4/5] group w-full"
+              style={{ position: "relative", overflow: "hidden" }}
+            >
               <Image
                 src="/images/about/company-profile.jpg"
                 alt="UM Global Exim specialty chemicals analysis and laboratory sourcing facility"
                 fill
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
+                style={{ objectFit: "cover" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#102B46]/90 via-[#102B46]/30 to-transparent" />
 

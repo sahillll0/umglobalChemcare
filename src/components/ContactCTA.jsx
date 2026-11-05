@@ -12,15 +12,19 @@ export default function ContactCTA() {
   return (
     <section className="relative py-14 sm:py-24 bg-[#102B46] text-white overflow-hidden">
       {/* Background Graphic Asset */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
         <Image
           src="/images/cta/cta-bg.jpg"
           alt="UM Global Exim chemical supply chain and sourcing partnership"
           fill
           sizes="100vw"
           className="object-cover object-center opacity-20"
+          style={{ objectFit: "cover", objectPosition: "center" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1E31]/95 via-[#102B46]/90 to-[#087F8C]/80" />
+        <div 
+          className="absolute inset-0 bg-gradient-to-r from-[#0B1E31]/95 via-[#102B46]/90 to-[#087F8C]/80" 
+          style={{ position: "absolute", inset: 0 }}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

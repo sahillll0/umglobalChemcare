@@ -38,18 +38,23 @@ export default function ProductCategories() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
               className="group relative rounded-2xl sm:rounded-3xl overflow-hidden bg-[#102B46] shadow-md border border-slate-200/80 hover:shadow-xl transition-all duration-300 flex flex-col h-[320px] sm:h-[380px] lg:h-[400px]"
+              style={{ position: "relative", overflow: "hidden" }}
             >
               {/* Background Image with Zoom on Hover */}
-              <div className="absolute inset-0">
+              <div className="absolute inset-0" style={{ position: "absolute", inset: 0 }}>
                 <Image
                   src={category.image}
                   alt={category.altText}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+                  style={{ objectFit: "cover", objectPosition: "center" }}
                 />
                 {/* Dark gradient overlay for contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1E31] via-[#102B46]/75 to-[#102B46]/35" />
+                <div 
+                  className="absolute inset-0 bg-gradient-to-t from-[#0B1E31] via-[#102B46]/75 to-[#102B46]/35" 
+                  style={{ position: "absolute", inset: 0 }}
+                />
               </div>
 
               {/* Top Badge: Stock-n-Sale */}

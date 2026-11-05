@@ -25,14 +25,18 @@ export default function History() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Visual Side */}
-          <div className="lg:col-span-6 relative">
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200 aspect-[16/10] sm:aspect-[4/3] group">
+          <div className="lg:col-span-6 relative" style={{ position: "relative" }}>
+            <div 
+              className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-slate-200 aspect-[16/10] sm:aspect-[4/3] group w-full"
+              style={{ position: "relative", overflow: "hidden" }}
+            >
               <Image
                 src="/images/about/history.jpg"
                 alt="UM Global Exim established chemical distribution and long-term customer relationships"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
+                style={{ objectFit: "cover" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#102B46]/85 via-transparent to-transparent" />
               
