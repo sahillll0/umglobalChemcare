@@ -22,7 +22,20 @@ export async function PATCH(request, { params }) {
   }
 
   const { status } = body || {};
-  const updated = await updateEnquiryStatus(id, status);
+  let updated;
+  try {
+    updated = await updateEnquiryStatus(id, status);
+  } catch (err) {
+    console.error("Status update failed:", err);
+    return Response.json(
+      {
+        success: false,
+        message:
+          "Could not save the change. On serverless deployments (e.g. Vercel) the file store is read-only — a database is required for the admin panel to persist data.",
+      },
+      { status: 503 }
+    );
+  }
   if (!updated) {
     return Response.json(
       { success: false, message: "Enquiry not found or invalid status." },
@@ -42,7 +55,20 @@ export async function DELETE(request, { params }) {
   }
 
   const { id } = await params;
-  const deleted = await deleteEnquiry(id);
+  let deleted;
+  try {
+    deleted = await deleteEnquiry(id);
+  } catch (err) {
+    console.error("Delete failed:", err);
+    return Response.json(
+      {
+        success: false,
+        message:
+          "Could not delete. On serverless deployments (e.g. Vercel) the file store is read-only — a database is required for the admin panel to persist data.",
+      },
+      { status: 503 }
+    );
+  }
   if (!deleted) {
     return Response.json(
       { success: false, message: "Enquiry not found." },

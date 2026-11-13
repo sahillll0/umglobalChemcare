@@ -141,6 +141,13 @@ export async function POST(request, { params }) {
     );
   }
 
-  const updated = await markEnquiryReplied(id);
+  let updated = null;
+  try {
+    updated = await markEnquiryReplied(id);
+  } catch (err) {
+    // Persistence may be unavailable (e.g. serverless read-only fs).
+    // The email was still sent, so report success; we just can't mark "Replied".
+    console.error("Could not mark enquiry as replied:", err);
+  }
   return Response.json({ success: true, enquiry: updated });
 }

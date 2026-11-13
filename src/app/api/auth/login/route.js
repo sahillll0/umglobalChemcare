@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import {
   COOKIE_NAME,
   cookieOptions,
+  isAuthConfigured,
   verifyCredentials,
   createSessionToken,
 } from "@/lib/auth";
@@ -25,6 +26,19 @@ export async function POST(request) {
     );
   }
 
+  // Missing env vars (e.g. not added to Vercel) — guide the user instead of
+  // returning a misleading "Invalid email or password".
+  if (!isAuthConfigured()) {
+    return Response.json(
+      {
+        success: false,
+        message:
+          "Admin login is not configured on this server. Add ADMIN_EMAIL, ADMIN_PASSWORD, and AUTH_SECRET as environment variables (Vercel → Project Settings → Environment Variables), then redeploy.",
+      },
+      { status: 503 }
+    );
+  }
+
   if (!verifyCredentials(email, password)) {
     return Response.json(
       { success: false, message: "Invalid email or password." },
@@ -35,7 +49,10 @@ export async function POST(request) {
   const token = createSessionToken(email);
   if (!token) {
     return Response.json(
-      { success: false, message: "Server is not configured (AUTH_SECRET missing)." },
+      {
+        success: false,
+        message: "Server is not configured (AUTH_SECRET missing).",
+      },
       { status: 500 }
     );
   }

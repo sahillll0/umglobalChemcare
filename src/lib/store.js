@@ -8,18 +8,23 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const FILE_PATH = path.join(DATA_DIR, "enquiries.json");
 
 async function ensureStore() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
   try {
-    await fs.access(FILE_PATH);
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    try {
+      await fs.access(FILE_PATH);
+    } catch {
+      await fs.writeFile(FILE_PATH, "[]", "utf8");
+    }
   } catch {
-    await fs.writeFile(FILE_PATH, "[]", "utf8");
+    // Read-only filesystem (e.g. serverless deploys such as Vercel).
+    // Reads will return [] and writes will fail gracefully higher up.
   }
 }
 
 async function readEnquiries() {
   await ensureStore();
-  const raw = await fs.readFile(FILE_PATH, "utf8");
   try {
+    const raw = await fs.readFile(FILE_PATH, "utf8");
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
   } catch {

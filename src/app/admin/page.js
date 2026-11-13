@@ -268,9 +268,11 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setEnquiries((prev) =>
-          prev.map((e) => (e.id === replyTo.id ? data.enquiry : e))
-        );
+        if (data.enquiry) {
+          setEnquiries((prev) =>
+            prev.map((e) => (e.id === replyTo.id ? data.enquiry : e))
+          );
+        }
         setNotice(`Reply email sent to ${replyTo.email}.`);
         setReplyTo(null);
       } else {

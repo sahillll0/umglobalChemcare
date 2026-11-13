@@ -16,6 +16,15 @@ function getSecret() {
   return process.env.AUTH_SECRET;
 }
 
+// True only when all three admin auth env vars are present.
+export function isAuthConfigured() {
+  return Boolean(
+    process.env.ADMIN_EMAIL &&
+      process.env.ADMIN_PASSWORD &&
+      process.env.AUTH_SECRET
+  );
+}
+
 function base64UrlEncode(input) {
   return Buffer.from(input).toString("base64url");
 }
