@@ -154,6 +154,7 @@ export const companyDetails = {
     emails: [
       // "export@umglobalexim.com",
       "sales@umglobalexim.com",
+     
     ],
     contactPersons: [
       {
