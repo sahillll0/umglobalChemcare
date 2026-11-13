@@ -65,7 +65,7 @@ export default function Hero() {
   const CurrentIcon = activeSlideData.icon;
 
   return (
-    <section id="home" className="relative min-h-[88vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#102B46]">
+    <section id="home" className="relative min-h-[88vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#1E293B]">
       {/* Background Images with AnimatePresence */}
       <div className="absolute inset-0 z-0" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
         <AnimatePresence mode="wait">
@@ -91,7 +91,7 @@ export default function Hero() {
         </AnimatePresence>
 
         {/* Multi-layered dark overlay for maximum text contrast & corporate tone */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1E31]/95 via-[#102B46]/90 to-[#0B1E31]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/95 via-[#1E293B]/90 to-[#0F172A]/80" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(32,164,168,0.22),transparent_70%)]" />
       </div>
 
@@ -104,12 +104,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#20A4A8] text-[11px] sm:text-xs font-semibold tracking-wide uppercase mb-3 sm:mb-5"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#2563EB] text-[11px] sm:text-xs font-semibold tracking-wide uppercase mb-3 sm:mb-5"
           >
-            <CurrentIcon className="w-3.5 h-3.5 text-[#20A4A8] shrink-0" />
+            <CurrentIcon className="w-3.5 h-3.5 text-[#2563EB] shrink-0" />
             <span className="text-white font-medium truncate">{activeSlideData.tagline}</span>
             <span className="text-white/40 hidden sm:inline">•</span>
-            <span className="text-[#20A4A8] hidden sm:inline">{activeSlideData.badge}</span>
+            <span className="text-[#2563EB] hidden sm:inline">{activeSlideData.badge}</span>
           </motion.div>
 
           {/* Heading */}
@@ -143,7 +143,7 @@ export default function Hero() {
           >
             <Link
               href="#profile"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-[#20A4A8] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#20A4A8]/30 hover:bg-[#198d91] active:scale-[0.98] transition-all group"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-[#2563EB] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#2563EB]/30 hover:bg-[#1D4ED8] active:scale-[0.98] transition-all group"
             >
               <span>Explore Our Company</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -153,7 +153,7 @@ export default function Hero() {
               href={`tel:${companyDetails.contact.primaryPhone.value}`}
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base border border-white/25 backdrop-blur-md active:scale-[0.98] transition-all"
             >
-              <PhoneCall className="w-4 h-4 text-[#20A4A8]" />
+              <PhoneCall className="w-4 h-4 text-[#2563EB]" />
               <span>Call +91 7304305372</span>
             </a>
           </motion.div>
@@ -170,7 +170,7 @@ export default function Hero() {
               <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Network</div>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
-              <div className="text-xl sm:text-3xl font-bold text-[#20A4A8] tracking-tight">50+ Yrs</div>
+              <div className="text-xl sm:text-3xl font-bold text-[#2563EB] tracking-tight">50+ Yrs</div>
               <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Experience</div>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
@@ -178,7 +178,7 @@ export default function Hero() {
               <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Stock & Sale</div>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
-              <div className="text-xl sm:text-3xl font-bold text-[#20A4A8] tracking-tight">100%</div>
+              <div className="text-xl sm:text-3xl font-bold text-[#2563EB] tracking-tight">100%</div>
               <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Compliant</div>
             </div>
           </motion.div>
@@ -201,7 +201,7 @@ export default function Hero() {
               onClick={() => setCurrentSlide(idx)}
               aria-label={`Go to slide ${idx + 1}`}
               className={`h-2 rounded-full transition-all duration-300 ${
-                currentSlide === idx ? "w-6 sm:w-8 bg-[#20A4A8]" : "w-2 bg-white/40 hover:bg-white/70"
+                currentSlide === idx ? "w-6 sm:w-8 bg-[#2563EB]" : "w-2 bg-white/40 hover:bg-white/70"
               }`}
             />
           ))}

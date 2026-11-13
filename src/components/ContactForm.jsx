@@ -86,10 +86,10 @@ export default function ContactForm() {
   return (
     <div className="bg-white p-5 sm:p-10 rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-md sm:shadow-lg">
       <div className="mb-5 sm:mb-8">
-        <h3 className="text-xl sm:text-2xl font-bold text-[#102B46] mb-1 sm:mb-2">
+        <h3 className="text-xl sm:text-2xl font-bold text-[#1E293B] mb-1 sm:mb-2">
           Send Us an Enquiry
         </h3>
-        <p className="text-xs sm:text-sm text-[#5C6F84]">
+        <p className="text-xs sm:text-sm text-[#64748B]">
           Fill in your chemical requirements and our sourcing team will respond promptly.
         </p>
       </div>
@@ -129,7 +129,7 @@ export default function ContactForm() {
         <div>
           <label 
             htmlFor="fullName" 
-            className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#102B46] mb-1.5"
+            className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-1.5"
           >
             Full Name <span className="text-rose-500">*</span>
           </label>
@@ -145,8 +145,8 @@ export default function ContactForm() {
                 required: "Full Name is required.",
                 minLength: { value: 2, message: "Name must be at least 2 characters." },
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#263746] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
-                errors.fullName ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#20A4A8]"
+              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#0F172A] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
+                errors.fullName ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#2563EB]"
               }`}
             />
           </div>
@@ -161,7 +161,7 @@ export default function ContactForm() {
           <div>
             <label 
               htmlFor="mobileNumber" 
-              className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#102B46] mb-1.5"
+              className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-1.5"
             >
               Mobile Number <span className="text-rose-500">*</span>
             </label>
@@ -180,8 +180,8 @@ export default function ContactForm() {
                     message: "Please enter a valid mobile number.",
                   },
                 })}
-                className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#263746] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
-                  errors.mobileNumber ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#20A4A8]"
+                className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#0F172A] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
+                  errors.mobileNumber ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#2563EB]"
                 }`}
               />
             </div>
@@ -194,7 +194,7 @@ export default function ContactForm() {
           <div>
             <label 
               htmlFor="email" 
-              className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#102B46] mb-1.5"
+              className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-1.5"
             >
               Email Address <span className="text-rose-500">*</span>
             </label>
@@ -213,8 +213,8 @@ export default function ContactForm() {
                     message: "Please enter a valid email address.",
                   },
                 })}
-                className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#263746] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
-                  errors.email ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#20A4A8]"
+                className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#0F172A] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
+                  errors.email ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#2563EB]"
                 }`}
               />
             </div>
@@ -228,7 +228,7 @@ export default function ContactForm() {
         <div>
           <label 
             htmlFor="address" 
-            className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#102B46] mb-1.5"
+            className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-1.5"
           >
             Address / Location <span className="text-rose-500">*</span>
           </label>
@@ -244,8 +244,8 @@ export default function ContactForm() {
                 required: "Address is required.",
                 minLength: { value: 5, message: "Address must be at least 5 characters." },
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#263746] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
-                errors.address ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#20A4A8]"
+              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#0F172A] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all ${
+                errors.address ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#2563EB]"
               }`}
             />
           </div>
@@ -258,7 +258,7 @@ export default function ContactForm() {
         <div>
           <label 
             htmlFor="message" 
-            className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#102B46] mb-1.5"
+            className="block text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#1E293B] mb-1.5"
           >
             Message / Sourcing Query <span className="text-rose-500">*</span>
           </label>
@@ -274,8 +274,8 @@ export default function ContactForm() {
                 required: "Message is required.",
                 minLength: { value: 10, message: "Message must be at least 10 characters." },
               })}
-              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#263746] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all resize-y ${
-                errors.message ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#20A4A8]"
+              className={`w-full pl-10 pr-4 py-3 rounded-xl border text-base sm:text-sm text-[#0F172A] bg-[#F8FAFC] focus:bg-white focus:outline-none transition-all resize-y ${
+                errors.message ? "border-rose-400 focus:border-rose-500" : "border-slate-200 focus:border-[#2563EB]"
               }`}
             />
           </div>
@@ -288,11 +288,11 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3.5 sm:py-4 rounded-xl bg-[#102B46] text-white font-bold text-xs sm:text-sm tracking-wide uppercase shadow-lg shadow-[#102B46]/20 hover:bg-[#087F8C] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full py-3.5 sm:py-4 rounded-xl bg-[#1E293B] text-white font-bold text-xs sm:text-sm tracking-wide uppercase shadow-lg shadow-[#1E293B]/20 hover:bg-[#2563EB] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-[#20A4A8]" />
+              <Loader2 className="w-4 h-4 animate-spin text-[#2563EB]" />
               <span>Submitting Enquiry...</span>
             </>
           ) : (

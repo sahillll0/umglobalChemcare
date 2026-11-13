@@ -15,9 +15,9 @@ export default function ContactInfo() {
   const { contact } = companyDetails;
 
   return (
-    <div className="bg-[#102B46] text-white p-5 sm:p-10 rounded-2xl sm:rounded-3xl shadow-xl border border-[#102B46] flex flex-col justify-between space-y-6 sm:space-y-8">
+    <div className="bg-[#1E293B] text-white p-5 sm:p-10 rounded-2xl sm:rounded-3xl shadow-xl border border-[#1E293B] flex flex-col justify-between space-y-6 sm:space-y-8">
       <div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/10 text-[#20A4A8] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-4">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/10 text-[#2563EB] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-3 sm:mb-4">
           <Building className="w-3.5 h-3.5" />
           <span>Official Corporate Office</span>
         </div>
@@ -28,7 +28,7 @@ export default function ContactInfo() {
 
         {/* Address Card */}
         <div className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 mb-4 sm:mb-6">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#20A4A8]/20 text-[#20A4A8] flex items-center justify-center shrink-0 mt-0.5">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#2563EB]/20 text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
             <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="flex-1 text-xs sm:text-sm">
@@ -45,7 +45,7 @@ export default function ContactInfo() {
               href={contact.address.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-2.5 text-xs font-semibold text-[#20A4A8] hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 mt-2.5 text-xs font-semibold text-[#2563EB] hover:text-white transition-colors"
             >
               <span>View on Google Maps</span>
               <ExternalLink className="w-3 h-3" />
@@ -55,7 +55,7 @@ export default function ContactInfo() {
 
         {/* Primary Contact Number with Call & WhatsApp buttons */}
         <div className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 mb-4 sm:mb-6">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#20A4A8]/20 text-[#20A4A8] flex items-center justify-center shrink-0 mt-0.5">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#2563EB]/20 text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
             <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="flex-1 text-xs sm:text-sm">
@@ -65,14 +65,14 @@ export default function ContactInfo() {
             <div className="flex flex-col gap-2 mt-1">
               <a
                 href={`tel:${contact.primaryPhone.value}`}
-                className="text-base sm:text-lg font-bold text-white hover:text-[#20A4A8] tracking-wide transition-colors"
+                className="text-base sm:text-lg font-bold text-white hover:text-[#2563EB] tracking-wide transition-colors"
               >
                 {contact.primaryPhone.display}
               </a>
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <a
                   href={`tel:${contact.primaryPhone.value}`}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#20A4A8] text-white text-xs font-bold hover:bg-[#198d91] active:scale-[0.98] transition-all"
+                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#2563EB] text-white text-xs font-bold hover:bg-[#1D4ED8] active:scale-[0.98] transition-all"
                 >
                   <Phone className="w-3 h-3" />
                   <span>Call</span>
@@ -93,7 +93,7 @@ export default function ContactInfo() {
 
         {/* Official Email */}
         <div className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10 mb-4 sm:mb-6">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#20A4A8]/20 text-[#20A4A8] flex items-center justify-center shrink-0 mt-0.5">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#2563EB]/20 text-[#2563EB] flex items-center justify-center shrink-0 mt-0.5">
             <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="flex-1 text-xs sm:text-sm">
@@ -105,7 +105,7 @@ export default function ContactInfo() {
                 <a
                   key={idx}
                   href={`mailto:${email}`}
-                  className="text-sm sm:text-base text-white hover:text-[#20A4A8] font-semibold transition-colors break-all"
+                  className="text-sm sm:text-base text-white hover:text-[#2563EB] font-semibold transition-colors break-all"
                 >
                   {email}
                 </a>
@@ -115,8 +115,8 @@ export default function ContactInfo() {
         </div>
 
         {/* Verified Division */}
-        <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-[#0B1E31]/80 border border-white/10">
-          <div className="flex items-center gap-2 text-[10px] sm:text-xs uppercase font-bold text-[#20A4A8] tracking-wider mb-2">
+        <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-[#0F172A]/80 border border-white/10">
+          <div className="flex items-center gap-2 text-[10px] sm:text-xs uppercase font-bold text-[#2563EB] tracking-wider mb-2">
             <UserCheck className="w-3.5 h-3.5" />
             <span>Dedicated Contact Division</span>
           </div>
@@ -126,7 +126,7 @@ export default function ContactInfo() {
             <div className="text-[11px] text-slate-400 mb-1.5">UM Global Exim</div>
             <a
               href={`tel:${contact.primaryPhone.value}`}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#20A4A8] hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] hover:text-white transition-colors"
             >
               <Phone className="w-3 h-3" />
               <span>{contact.primaryPhone.display}</span>
@@ -137,7 +137,7 @@ export default function ContactInfo() {
 
       <div className="pt-3 sm:pt-4 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
         <span>UM Global Exim</span>
-        <span className="text-[#20A4A8] font-medium text-[11px] sm:text-xs">Global Chemicals Resourcing</span>
+        <span className="text-[#2563EB] font-medium text-[11px] sm:text-xs">Global Chemicals Resourcing</span>
       </div>
     </div>
   );

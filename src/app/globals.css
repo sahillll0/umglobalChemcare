@@ -2,15 +2,15 @@
 
 @layer base {
   :root {
-    --primary: #102B46;
-    --primary-dark: #0B1E31;
-    --secondary: #087F8C;
-    --secondary-hover: #066974;
-    --accent: #20A4A8;
-    --accent-light: #E0F5F6;
-    --bg-light: #F4F7F9;
-    --text-dark: #263746;
-    --text-muted: #5C6F84;
+    --primary: #1E293B;
+    --primary-dark: #0F172A;
+    --secondary: #2563EB;
+    --secondary-hover: #0F172A;
+    --accent: #2563EB;
+    --accent-light: #EFF6FF;
+    --bg-light: #F8FAFC;
+    --text-dark: #0F172A;
+    --text-muted: #64748B;
     --card-border: #E2E8F0;
   }
 
@@ -30,51 +30,51 @@
 
 /* Custom Utilities for UM Global Exim Branding */
 .bg-brand-primary {
-  background-color: #102B46;
+  background-color: #1E293B;
 }
 
 .bg-brand-secondary {
-  background-color: #087F8C;
+  background-color: #2563EB;
 }
 
 .bg-brand-accent {
-  background-color: #20A4A8;
+  background-color: #2563EB;
 }
 
 .bg-brand-light {
-  background-color: #F4F7F9;
+  background-color: #F8FAFC;
 }
 
 .text-brand-primary {
-  color: #102B46;
+  color: #1E293B;
 }
 
 .text-brand-secondary {
-  color: #087F8C;
+  color: #2563EB;
 }
 
 .text-brand-accent {
-  color: #20A4A8;
+  color: #2563EB;
 }
 
 .text-brand-dark {
-  color: #263746;
+  color: #0F172A;
 }
 
 .text-brand-muted {
-  color: #5C6F84;
+  color: #64748B;
 }
 
 .border-brand-accent {
-  border-color: #20A4A8;
+  border-color: #2563EB;
 }
 
 .border-brand-secondary {
-  border-color: #087F8C;
+  border-color: #2563EB;
 }
 
 /* Smooth Focus states */
 *:focus-visible {
-  outline: 2px solid #20A4A8;
+  outline: 2px solid #2563EB;
   outline-offset: 2px;
 }

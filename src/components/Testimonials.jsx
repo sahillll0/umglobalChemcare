@@ -22,15 +22,15 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#102B46]/5 border border-[#102B46]/10 text-[#087F8C] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1E293B]/5 border border-[#1E293B]/10 text-[#2563EB] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2.5">
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Client Feedback</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#102B46] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1E293B] tracking-tight">
             {testimonialsData.heading}
           </h2>
-          <div className="w-16 sm:w-20 h-1 sm:h-1.5 bg-[#20A4A8] mx-auto mt-3 rounded-full" />
-          <p className="mt-3 text-xs sm:text-lg text-[#5C6F84]">
+          <div className="w-16 sm:w-20 h-1 sm:h-1.5 bg-[#2563EB] mx-auto mt-3 rounded-full" />
+          <p className="mt-3 text-xs sm:text-lg text-[#64748B]">
             {testimonialsData.subheading}
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function Testimonials() {
         {/* Carousel for Featured View + Full Grid for Desktop */}
         <div className="max-w-4xl mx-auto">
           {/* Featured Carousel Card */}
-          <div className="relative bg-gradient-to-br from-[#102B46] to-[#0B1E31] rounded-2xl sm:rounded-3xl p-5 sm:p-12 text-white shadow-xl overflow-hidden border border-[#102B46]">
+          <div className="relative bg-gradient-to-br from-[#1E293B] to-[#0F172A] rounded-2xl sm:rounded-3xl p-5 sm:p-12 text-white shadow-xl overflow-hidden border border-[#1E293B]">
             <Quote className="absolute top-4 right-4 sm:top-6 sm:right-8 w-16 h-16 sm:w-24 sm:h-24 text-white/5 pointer-events-none" />
 
             <div className="min-h-[160px] sm:min-h-[170px] flex flex-col justify-between">
@@ -50,7 +50,7 @@ export default function Testimonials() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="flex items-center gap-1 mb-3 sm:mb-6 text-[#20A4A8]">
+                  <div className="flex items-center gap-1 mb-3 sm:mb-6 text-[#2563EB]">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
                     ))}
@@ -61,14 +61,14 @@ export default function Testimonials() {
                   </p>
 
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#20A4A8] text-white flex items-center justify-center font-bold text-sm sm:text-lg shadow-md shrink-0">
+                    <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#2563EB] text-white flex items-center justify-center font-bold text-sm sm:text-lg shadow-md shrink-0">
                       {items[currentIndex].name.charAt(0)}
                     </div>
                     <div>
                       <h4 className="text-base sm:text-lg font-bold text-white tracking-wide">
                         {items[currentIndex].name}
                       </h4>
-                      <p className="text-[10px] sm:text-xs text-[#20A4A8] font-medium uppercase tracking-wider">
+                      <p className="text-[10px] sm:text-xs text-[#2563EB] font-medium uppercase tracking-wider">
                         Verified Business Partner
                       </p>
                     </div>
@@ -86,7 +86,7 @@ export default function Testimonials() {
                     onClick={() => setCurrentIndex(idx)}
                     aria-label={`View testimonial ${idx + 1}`}
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      currentIndex === idx ? "w-6 sm:w-8 bg-[#20A4A8]" : "w-2 bg-white/30 hover:bg-white/60"
+                      currentIndex === idx ? "w-6 sm:w-8 bg-[#2563EB]" : "w-2 bg-white/30 hover:bg-white/60"
                     }`}
                   />
                 ))}
@@ -119,11 +119,11 @@ export default function Testimonials() {
                 onClick={() => setCurrentIndex(idx)}
                 className={`text-left p-3 rounded-xl border transition-all ${
                   currentIndex === idx
-                    ? "bg-[#F4F7F9] border-[#087F8C] shadow-sm font-semibold"
+                    ? "bg-[#F8FAFC] border-[#2563EB] shadow-sm font-semibold"
                     : "bg-white border-slate-200/80 hover:border-slate-300"
                 }`}
               >
-                <div className="text-xs font-bold text-[#102B46] truncate">{item.name}</div>
+                <div className="text-xs font-bold text-[#1E293B] truncate">{item.name}</div>
                 <div className="text-[10px] text-slate-400">Feedback 0{idx + 1}</div>
               </button>
             ))}

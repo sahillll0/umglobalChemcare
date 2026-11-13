@@ -13,14 +13,14 @@ export default function History() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#087F8C]/10 border border-[#087F8C]/20 text-[#087F8C] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2563EB]/10 border border-[#2563EB]/20 text-[#2563EB] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2.5">
             <HistoryIcon className="w-3.5 h-3.5" />
             <span>Legacy & Heritage</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#102B46] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#1E293B] tracking-tight">
             {history.heading}
           </h2>
-          <div className="w-16 sm:w-20 h-1 sm:h-1.5 bg-[#20A4A8] mx-auto mt-3 rounded-full" />
+          <div className="w-16 sm:w-20 h-1 sm:h-1.5 bg-[#2563EB] mx-auto mt-3 rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -38,20 +38,20 @@ export default function History() {
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 style={{ objectFit: "cover" }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#102B46]/85 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1E293B]/85 via-transparent to-transparent" />
               
               <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-6 sm:left-6 sm:right-6 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur-md border border-white/50 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] sm:text-xs uppercase font-semibold text-[#087F8C] tracking-wider">
+                  <span className="text-[10px] sm:text-xs uppercase font-semibold text-[#2563EB] tracking-wider">
                     Industry Experience
                   </span>
-                  <div className="text-xl sm:text-2xl font-black text-[#102B46]">5+ Decades</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#1E293B]">5+ Decades</div>
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] sm:text-xs uppercase font-semibold text-slate-500 tracking-wider">
                     Quality Standard
                   </span>
-                  <div className="text-xl sm:text-2xl font-black text-[#20A4A8]">100% Reliable</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#2563EB]">100% Reliable</div>
                 </div>
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function History() {
 
           {/* Timeline & Authentic Verified Record */}
           <div className="lg:col-span-6">
-            <div className="relative pl-5 sm:pl-8 border-l-2 border-[#087F8C]/30">
+            <div className="relative pl-5 sm:pl-8 border-l-2 border-[#2563EB]/30">
               <motion.div 
                 initial={{ opacity: 0, x: -15 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -68,39 +68,39 @@ export default function History() {
                 className="relative"
               >
                 {/* Node pin */}
-                <div className="absolute -left-[27px] sm:-left-[39px] top-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#087F8C] border-4 border-white shadow-md flex items-center justify-center">
+                <div className="absolute -left-[27px] sm:-left-[39px] top-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#2563EB] border-4 border-white shadow-md flex items-center justify-center">
                   <div className="w-1.5 h-1.5 rounded-full bg-white" />
                 </div>
 
-                <div className="bg-[#F4F7F9] p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#102B46] text-white text-[10px] sm:text-xs font-bold tracking-wider mb-3">
-                    <Calendar className="w-3 h-3 text-[#20A4A8]" />
+                <div className="bg-[#F8FAFC] p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#1E293B] text-white text-[10px] sm:text-xs font-bold tracking-wider mb-3">
+                    <Calendar className="w-3 h-3 text-[#2563EB]" />
                     <span>FIVE DECADES OF EXCELLENCE</span>
                   </div>
 
-                  <h3 className="text-lg sm:text-2xl font-bold text-[#102B46] mb-2 sm:mb-3">
+                  <h3 className="text-lg sm:text-2xl font-bold text-[#1E293B] mb-2 sm:mb-3">
                     {history.title}
                   </h3>
 
-                  <p className="text-sm sm:text-lg text-[#263746] leading-relaxed">
+                  <p className="text-sm sm:text-lg text-[#0F172A] leading-relaxed">
                     {history.description}
                   </p>
 
                   <div className="mt-5 pt-4 sm:pt-6 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-[#20A4A8]/10 text-[#087F8C] flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-[#2563EB]/10 text-[#2563EB] flex items-center justify-center shrink-0">
                         <HeartHandshake className="w-4 h-4" />
                       </div>
-                      <span className="text-xs sm:text-sm font-semibold text-[#102B46]">
+                      <span className="text-xs sm:text-sm font-semibold text-[#1E293B]">
                         Long-Term Customer Relationships
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-[#087F8C]/10 text-[#087F8C] flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-[#2563EB]/10 text-[#2563EB] flex items-center justify-center shrink-0">
                         <ShieldCheck className="w-4 h-4" />
                       </div>
-                      <span className="text-xs sm:text-sm font-semibold text-[#102B46]">
+                      <span className="text-xs sm:text-sm font-semibold text-[#1E293B]">
                         High-Quality Product Delivery
                       </span>
                     </div>
