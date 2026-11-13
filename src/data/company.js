@@ -9,7 +9,6 @@ export const companyDetails = {
   ],
   heroDescription:
     "Promoters in the business of sourcing and consolidating specialty chemicals and ingredients for more than five decades. Your trusted resourcing partner providing reliable, transparent, and cost-effective supply chain solutions.",
-  establishedYear: 1970,
   yearsOfExperience: "50+",
   
   about: {
@@ -37,10 +36,9 @@ export const companyDetails = {
 
   history: {
     heading: "Our History",
-    year: "1970",
-    title: "Establishment of UM Global Exim",
+    title: "Over Five Decades of Industry Leadership",
     description:
-      "UM Global Exim was established in 1970. The company has more than five decades of experience and is known for long-term customer relationships and delivery of high-quality products.",
+      "With more than five decades of experience, UM Global Exim is known for long-term customer relationships and reliable delivery of high-quality products across global markets.",
   },
 
   values: {
@@ -154,7 +152,8 @@ export const companyDetails = {
       value: "+917304305372",
     },
     emails: [
-      "export@umglobalexim.com",
+      // "export@umglobalexim.com",
+      "sales@umglobalexim.com",
     ],
     contactPersons: [
       {

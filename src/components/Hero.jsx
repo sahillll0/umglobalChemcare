@@ -166,16 +166,16 @@ export default function Hero() {
             className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 text-white"
           >
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
-              <div className="text-xl sm:text-3xl font-bold text-white tracking-tight">1970</div>
-              <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Established</div>
+              <div className="text-xl sm:text-3xl font-bold text-white tracking-tight">Global</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Network</div>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
               <div className="text-xl sm:text-3xl font-bold text-[#20A4A8] tracking-tight">50+ Yrs</div>
               <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Experience</div>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
-              <div className="text-xl sm:text-3xl font-bold text-white tracking-tight">Global</div>
-              <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Sourcing</div>
+              <div className="text-xl sm:text-3xl font-bold text-white tracking-tight">Just-In-Time</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium">Stock & Sale</div>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-3 sm:p-0 sm:bg-transparent sm:border-0 text-center sm:text-left">
               <div className="text-xl sm:text-3xl font-bold text-[#20A4A8] tracking-tight">100%</div>

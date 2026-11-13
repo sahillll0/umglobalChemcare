@@ -202,7 +202,7 @@ export async function POST(request) {
                       <tr>
                         <td>
                           <strong>Direct Helpline / WhatsApp:</strong> +91 7304305372<br />
-                          <strong>Email:</strong> export@umglobalexim.com<br />
+                          <strong>Email:</strong> export@umglobalexim.com | Sales@umglobalexim.com<br />
                           <strong>Head Office:</strong> Aidun Building B, 1st Dhobi Talao Lane, Mumbai - 400002
                         </td>
                       </tr>
@@ -219,7 +219,7 @@ export async function POST(request) {
                 <!-- Footer -->
                 <tr>
                   <td style="background-color: #0B1E31; padding: 20px 30px; text-align: center; color: #94a3b8; font-size: 12px;">
-                    <p style="margin: 0;">© ${new Date().getFullYear()} UM Global Exim. Estd. 1970 • 50+ Years of Sourcing Excellence.</p>
+                    <p style="margin: 0;">© ${new Date().getFullYear()} UM Global Exim. 50+ Years of Sourcing Excellence.</p>
                   </td>
                 </tr>
 
@@ -280,7 +280,7 @@ export async function POST(request) {
       {
         success: false,
         message:
-          "An error occurred while processing your request. Please call us directly at +91 7304305372 or email export@umglobalexim.com.",
+          "An error occurred while processing your request. Please call us directly at +91 7304305372 or email export@umglobalexim.com / Sales@umglobalexim.com.",
       },
       { status: 500 }
     );

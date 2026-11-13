@@ -87,6 +87,13 @@ export default function Header() {
               <Mail className="w-3.5 h-3.5 text-[#20A4A8]" />
               <span>{companyDetails.contact.emails[0]}</span>
             </a>
+            <a 
+              href={`mailto:${companyDetails.contact.emails[1]}`}
+              className="hidden lg:inline-flex items-center gap-2 hover:text-[#20A4A8] transition-colors"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#20A4A8]" />
+              <span>{companyDetails.contact.emails[1]}</span>
+            </a>
           </div>
 
           <div className="flex items-center gap-4 text-slate-300">
@@ -96,7 +103,7 @@ export default function Header() {
             </span>
             <span className="text-slate-500">|</span>
             <span className="text-emerald-400 font-medium">
-              Estd. 1970 • 50+ Years Experience
+              50+ Years Experience • Global Sourcing
             </span>
           </div>
         </div>
@@ -136,7 +143,7 @@ export default function Header() {
               <span className={`text-[9px] sm:text-[10px] tracking-wider uppercase font-semibold transition-colors ${
                 isScrolled ? "text-[#087F8C]" : "text-[#20A4A8]"
               }`}>
-                Specialty Chemicals • Estd. 1970
+                Specialty Chemicals & Sourcing
               </span>
             </div>
           </Link>
@@ -267,13 +274,16 @@ export default function Header() {
                 </a>
               </div>
 
-              <div className="pt-2 text-center">
-                <a
-                  href={`mailto:${companyDetails.contact.emails[0]}`}
-                  className="text-xs text-slate-500 hover:text-[#087F8C] transition-colors break-all"
-                >
-                  {companyDetails.contact.emails[0]}
-                </a>
+              <div className="pt-2 text-center space-y-1">
+                {companyDetails.contact.emails.map((em, idx) => (
+                  <a
+                    key={idx}
+                    href={`mailto:${em}`}
+                    className="block text-xs text-slate-500 hover:text-[#087F8C] transition-colors break-all"
+                  >
+                    {em}
+                  </a>
+                ))}
               </div>
             </div>
           </div>

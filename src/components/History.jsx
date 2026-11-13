@@ -43,15 +43,15 @@ export default function History() {
               <div className="absolute bottom-3.5 left-3.5 right-3.5 sm:bottom-6 sm:left-6 sm:right-6 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/95 backdrop-blur-md border border-white/50 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] sm:text-xs uppercase font-semibold text-[#087F8C] tracking-wider">
-                    Founding Year
+                    Industry Experience
                   </span>
-                  <div className="text-xl sm:text-2xl font-black text-[#102B46]">1970</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#102B46]">5+ Decades</div>
                 </div>
                 <div className="text-right">
                   <span className="text-[10px] sm:text-xs uppercase font-semibold text-slate-500 tracking-wider">
-                    Experience
+                    Quality Standard
                   </span>
-                  <div className="text-xl sm:text-2xl font-black text-[#20A4A8]">5+ Decades</div>
+                  <div className="text-xl sm:text-2xl font-black text-[#20A4A8]">100% Reliable</div>
                 </div>
               </div>
             </div>
@@ -75,7 +75,7 @@ export default function History() {
                 <div className="bg-[#F4F7F9] p-5 sm:p-8 rounded-2xl border border-slate-200 shadow-sm">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#102B46] text-white text-[10px] sm:text-xs font-bold tracking-wider mb-3">
                     <Calendar className="w-3 h-3 text-[#20A4A8]" />
-                    <span>ESTABLISHED 1970</span>
+                    <span>FIVE DECADES OF EXCELLENCE</span>
                   </div>
 
                   <h3 className="text-lg sm:text-2xl font-bold text-[#102B46] mb-2 sm:mb-3">

@@ -46,9 +46,9 @@ export default function Footer() {
               <span>Full Regulatory Compliance</span>
             </span>
             <span className="hidden sm:inline">•</span>
-            <span>Estd. 1970</span>
-            <span className="hidden sm:inline">•</span>
             <span>50+ Years Experience</span>
+            <span className="hidden sm:inline">•</span>
+            <span>Global Sourcing Partner</span>
           </div>
         </div>
       </div>

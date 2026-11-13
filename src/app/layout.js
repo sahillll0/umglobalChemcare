@@ -53,7 +53,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "UM Global Exim | Sourcing & Consolidating Specialty Chemicals",
     description:
-      "One Stop for All Types of Chemicals. Eco-Friendly Chemicals. Committed to Quality. Established 1970.",
+      "One Stop for All Types of Chemicals. Eco-Friendly Chemicals. Committed to Quality. Over 5 Decades of Excellence.",
     images: ["/images/hero/slide1.jpg"],
   },
   robots: {
@@ -83,7 +83,6 @@ export default function RootLayout({ children }) {
     "alternateName": "UM Global Exim",
     "url": "https://umglobalexim.com",
     "logo": "https://umglobalexim.com/images/logo.png",
-    "foundingDate": "1970",
     "description":
       "Promoters in the business of sourcing and consolidating specialty chemicals and ingredients for more than five decades. Transparent, reliable, and cost-effective supply chain solutions.",
     "address": {
@@ -104,7 +103,8 @@ export default function RootLayout({ children }) {
       }
     ],
     "email": [
-      "export@umglobalexim.com"
+      "export@umglobalexim.com",
+      "Sales@umglobalexim.com"
     ]
   };
 
