@@ -1,30 +1,49 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URL;
-const dbName = process.env.MONGODB_DB || undefined;
+const rawUri = (process.env.MONGODB_URL || "").trim();
+const dbName = (process.env.MONGODB_DB || "umglobal").trim();
 
 let clientPromise = null;
 
-if (uri) {
-  if (process.env.NODE_ENV === "development") {
-    // Reuse the client across hot reloads in dev to avoid exhausting connections.
-    if (!global._mongoClientPromise) {
-      const client = new MongoClient(uri, { serverSelectionTimeoutMS: 10000 });
-      global._mongoClientPromise = client.connect();
-    }
-    clientPromise = global._mongoClientPromise;
-  } else {
-    const client = new MongoClient(uri, { serverSelectionTimeoutMS: 10000 });
-    clientPromise = client.connect();
+function withTimeout(promise, ms = 2500) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`MongoDB connection timed out after ${ms}ms`)), ms)
+    ),
+  ]);
+}
+
+if (rawUri) {
+  // Use global client promise across dev and production to reuse connection pool
+  // and prevent exhausting Atlas connection limits or spinning on cold starts.
+  if (!global._mongoClientPromise) {
+    const client = new MongoClient(rawUri, {
+      serverSelectionTimeoutMS: 2500,
+      connectTimeoutMS: 2500,
+      maxPoolSize: 10,
+    });
+    global._mongoClientPromise = client.connect().catch((err) => {
+      console.warn("MongoDB Atlas connection attempt failed:", err.message);
+      global._mongoClientPromise = null;
+      return null;
+    });
   }
+  clientPromise = global._mongoClientPromise;
 }
 
 export async function getCollection(name = "enquiries") {
   if (!clientPromise) return null;
-  const client = await clientPromise;
-  return client.db(dbName).collection(name);
+  try {
+    const client = await withTimeout(clientPromise, 2500);
+    if (!client) return null;
+    return client.db(dbName).collection(name);
+  } catch (err) {
+    console.warn("MongoDB getCollection failed:", err.message);
+    return null;
+  }
 }
 
 export function isMongoConfigured() {
-  return Boolean(uri);
+  return Boolean(rawUri);
 }

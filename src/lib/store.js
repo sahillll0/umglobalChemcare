@@ -1,13 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
-import { getCollection } from "./mongo";
+import { getCollection, isMongoConfigured } from "./mongo.js";
 
 export const STATUSES = ["pending", "in_progress", "completed", "rejected"];
-
-// Use MongoDB when MONGODB_URL is set (production/Vercel);
-// otherwise fall back to a local JSON file (local development).
-const USE_MONGO = Boolean(process.env.MONGODB_URL);
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const FILE_PATH = path.join(DATA_DIR, "enquiries.json");
@@ -17,15 +13,16 @@ const FILE_PATH = path.join(DATA_DIR, "enquiries.json");
 /* ------------------------------------------------------------------ */
 
 function mapDoc(d) {
+  if (!d) return null;
   return {
-    id: d._id,
+    id: d._id || d.id,
     createdAt: d.createdAt ? new Date(d.createdAt).toISOString() : null,
-    status: d.status,
-    fullName: d.fullName,
-    mobileNumber: d.mobileNumber,
-    email: d.email,
-    address: d.address,
-    message: d.message,
+    status: d.status || "pending",
+    fullName: d.fullName || "",
+    mobileNumber: d.mobileNumber || "",
+    email: d.email || "",
+    address: d.address || "",
+    message: d.message || "",
     updatedAt: d.updatedAt ? new Date(d.updatedAt).toISOString() : null,
     lastReplyAt: d.lastReplyAt ? new Date(d.lastReplyAt).toISOString() : null,
     lastReplyChannel: d.lastReplyChannel || null,
@@ -34,6 +31,7 @@ function mapDoc(d) {
 
 async function mongoAddEnquiry(data) {
   const col = await getCollection();
+  if (!col) return null;
   const id = crypto.randomUUID();
   const doc = {
     _id: id,
@@ -54,12 +52,14 @@ async function mongoAddEnquiry(data) {
 
 async function mongoListEnquiries() {
   const col = await getCollection();
+  if (!col) return null;
   const docs = await col.find({}).sort({ createdAt: -1 }).toArray();
   return docs.map(mapDoc);
 }
 
 async function mongoGetEnquiry(id) {
   const col = await getCollection();
+  if (!col) return null;
   const doc = await col.findOne({ _id: id });
   return doc ? mapDoc(doc) : null;
 }
@@ -67,6 +67,7 @@ async function mongoGetEnquiry(id) {
 async function mongoUpdateEnquiryStatus(id, status) {
   if (!STATUSES.includes(status)) return null;
   const col = await getCollection();
+  if (!col) return null;
   const res = await col.updateOne(
     { _id: id },
     { $set: { status, updatedAt: new Date() } }
@@ -78,6 +79,7 @@ async function mongoUpdateEnquiryStatus(id, status) {
 
 async function mongoMarkEnquiryReplied(id) {
   const col = await getCollection();
+  if (!col) return null;
   const res = await col.updateOne(
     { _id: id },
     { $set: { lastReplyAt: new Date(), lastReplyChannel: "email" } }
@@ -89,12 +91,13 @@ async function mongoMarkEnquiryReplied(id) {
 
 async function mongoDeleteEnquiry(id) {
   const col = await getCollection();
+  if (!col) return null;
   const res = await col.deleteOne({ _id: id });
   return res.deletedCount > 0;
 }
 
 /* ------------------------------------------------------------------ */
-/* JSON-file backend (local development)                              */
+/* JSON-file backend (local storage / fallback)                       */
 /* ------------------------------------------------------------------ */
 
 async function ensureStore() {
@@ -106,7 +109,7 @@ async function ensureStore() {
       await fs.writeFile(FILE_PATH, "[]", "utf8");
     }
   } catch {
-    // Read-only filesystem (e.g. serverless deploys such as Vercel).
+    // Read-only filesystem (e.g. serverless deploys).
   }
 }
 
@@ -123,7 +126,11 @@ async function readEnquiries() {
 
 async function writeEnquiries(enquiries) {
   await ensureStore();
-  await fs.writeFile(FILE_PATH, JSON.stringify(enquiries, null, 2), "utf8");
+  try {
+    await fs.writeFile(FILE_PATH, JSON.stringify(enquiries, null, 2), "utf8");
+  } catch (err) {
+    console.warn("Could not write to local file store:", err.message);
+  }
 }
 
 async function fileAddEnquiry(data) {
@@ -137,6 +144,9 @@ async function fileAddEnquiry(data) {
     email: data.email,
     address: data.address,
     message: data.message,
+    updatedAt: null,
+    lastReplyAt: null,
+    lastReplyChannel: null,
   };
   enquiries.unshift(enquiry);
   await writeEnquiries(enquiries);
@@ -183,33 +193,87 @@ async function fileDeleteEnquiry(id) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Public API (selects backend automatically)                          */
+/* Public API (resilient multi-tier persistence)                       */
 /* ------------------------------------------------------------------ */
 
 export async function addEnquiry(data) {
-  return USE_MONGO ? mongoAddEnquiry(data) : fileAddEnquiry(data);
+  if (isMongoConfigured()) {
+    try {
+      const res = await mongoAddEnquiry(data);
+      if (res) {
+        // Also persist to local file in background if possible for backup
+        fileAddEnquiry(data).catch(() => {});
+        return res;
+      }
+    } catch (err) {
+      console.warn("MongoDB addEnquiry error, falling back to file store:", err.message);
+    }
+  }
+  return fileAddEnquiry(data);
 }
 
 export async function listEnquiries() {
-  return USE_MONGO ? mongoListEnquiries() : fileListEnquiries();
+  if (isMongoConfigured()) {
+    try {
+      const res = await mongoListEnquiries();
+      if (res && res.length > 0) return res;
+      // If mongo collection is empty, check file store to merge or display
+      const fileDocs = await fileListEnquiries();
+      if (res && res.length === 0 && fileDocs.length > 0) return fileDocs;
+      if (res) return res;
+    } catch (err) {
+      console.warn("MongoDB listEnquiries error, falling back to file store:", err.message);
+    }
+  }
+  return fileListEnquiries();
 }
 
 export async function getEnquiry(id) {
-  return USE_MONGO ? mongoGetEnquiry(id) : fileGetEnquiry(id);
+  if (isMongoConfigured()) {
+    try {
+      const res = await mongoGetEnquiry(id);
+      if (res) return res;
+    } catch (err) {
+      console.warn("MongoDB getEnquiry error, checking file store:", err.message);
+    }
+  }
+  return fileGetEnquiry(id);
 }
 
 export async function updateEnquiryStatus(id, status) {
-  return USE_MONGO
-    ? mongoUpdateEnquiryStatus(id, status)
-    : fileUpdateEnquiryStatus(id, status);
+  if (isMongoConfigured()) {
+    try {
+      const res = await mongoUpdateEnquiryStatus(id, status);
+      if (res) return res;
+    } catch (err) {
+      console.warn("MongoDB updateEnquiryStatus error:", err.message);
+    }
+  }
+  return fileUpdateEnquiryStatus(id, status);
 }
 
 export async function markEnquiryReplied(id) {
-  return USE_MONGO ? mongoMarkEnquiryReplied(id) : fileMarkEnquiryReplied(id);
+  if (isMongoConfigured()) {
+    try {
+      const res = await mongoMarkEnquiryReplied(id);
+      if (res) return res;
+    } catch (err) {
+      console.warn("MongoDB markEnquiryReplied error:", err.message);
+    }
+  }
+  return fileMarkEnquiryReplied(id);
 }
 
 export async function deleteEnquiry(id) {
-  return USE_MONGO ? mongoDeleteEnquiry(id) : fileDeleteEnquiry(id);
+  if (isMongoConfigured()) {
+    try {
+      const res = await mongoDeleteEnquiry(id);
+      if (res) return res;
+    } catch (err) {
+      console.warn("MongoDB deleteEnquiry error:", err.message);
+    }
+  }
+  return fileDeleteEnquiry(id);
 }
 
 export function computeStats(enquiries) {
