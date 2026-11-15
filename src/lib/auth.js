@@ -6,7 +6,10 @@ export const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days (seconds)
 
 export const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  // Only enforce Secure on real HTTPS serverless deployments, allow HTTP on localhost
+  secure:
+    process.env.NODE_ENV === "production" &&
+    Boolean(process.env.VERCEL || process.env.RAILWAY_STATIC_URL),
   sameSite: "lax",
   path: "/",
   maxAge: SESSION_MAX_AGE,

@@ -2,7 +2,8 @@ import { Resend } from "resend";
 import { isAuthenticated } from "@/lib/auth";
 import { getEnquiry, markEnquiryReplied } from "@/lib/store";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 function escapeHtml(str) {
   return String(str)
@@ -63,6 +64,16 @@ export async function POST(request, { params }) {
     return Response.json(
       { success: false, message: "Message is required." },
       { status: 400 }
+    );
+  }
+
+  if (!resend) {
+    return Response.json(
+      {
+        success: false,
+        message: "Resend API key is not configured on the server. Please reply directly via email or WhatsApp.",
+      },
+      { status: 503 }
     );
   }
 
@@ -145,8 +156,6 @@ export async function POST(request, { params }) {
   try {
     updated = await markEnquiryReplied(id);
   } catch (err) {
-    // Persistence may be unavailable (e.g. serverless read-only fs).
-    // The email was still sent, so report success; we just can't mark "Replied".
     console.error("Could not mark enquiry as replied:", err);
   }
   return Response.json({ success: true, enquiry: updated });

@@ -7,7 +7,8 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const ADMIN_EMAIL =
   process.env.ADMIN_NOTIFICATION_EMAIL || "sahiltippe111@gmail.com";
 
-const resend = new Resend(RESEND_API_KEY);
+// Only instantiate Resend when API key is provided to avoid crashing on undefined keys
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 export async function POST(request) {
   try {
@@ -38,9 +39,11 @@ export async function POST(request) {
     const { fullName, mobileNumber, email, address, message } =
       validationResult.data;
 
-    // Persist the enquiry so it appears in the /admin panel
+    // 2. Persist the enquiry so it appears in the /admin panel immediately
+    let savedEnquiry = null;
     try {
-      await addEnquiry(validationResult.data);
+      savedEnquiry = await addEnquiry(validationResult.data);
+      console.log("Enquiry successfully persisted to store:", savedEnquiry?.id);
     } catch (storeErr) {
       console.error("Failed to persist enquiry to store:", storeErr);
     }
@@ -51,7 +54,7 @@ export async function POST(request) {
       timeStyle: "medium",
     });
 
-    // 2. Beautiful HTML Template for Admin Notification (sahiltippe111@gmail.com)
+    // 3. Beautiful HTML Template for Admin Notification
     const adminEmailHtml = `
       <!DOCTYPE html>
       <html>
@@ -154,7 +157,7 @@ export async function POST(request) {
       </html>
     `;
 
-    // 3. Beautiful HTML Template for Customer Confirmation
+    // 4. Beautiful HTML Template for Customer Confirmation
     const customerEmailHtml = `
       <!DOCTYPE html>
       <html>
@@ -227,7 +230,7 @@ export async function POST(request) {
                 <!-- Footer -->
                 <tr>
                   <td style="background-color: #0F172A; padding: 20px 30px; text-align: center; color: #94a3b8; font-size: 12px;">
-                    <p style="margin: 0;">© ${new Date().getFullYear()} UM Global Exim. 50+ Years of Sourcing Excellence.</p>
+                    <p style="margin: 0;">© ${new Date().getFullYear()} UM Global Exim. Sourcing Excellence.</p>
                   </td>
                 </tr>
 
@@ -239,37 +242,34 @@ export async function POST(request) {
       </html>
     `;
 
-    // 4. Dispatch Email to Admin (sahiltippe111@gmail.com) via Resend
+    // 5. Dispatch Email to Admin via Resend (if resend configured)
     let adminEmailResult = null;
-    try {
-      adminEmailResult = await resend.emails.send({
-        from: "UM Global Exim <onboarding@resend.dev>",
-        to: [ADMIN_EMAIL],
-        replyTo: email,
-        subject: `🔔 New Chemical Enquiry: ${fullName} (${mobileNumber})`,
-        html: adminEmailHtml,
-      });
+    if (resend) {
+      try {
+        adminEmailResult = await resend.emails.send({
+          from: "UM Global Exim <onboarding@resend.dev>",
+          to: [ADMIN_EMAIL],
+          replyTo: email,
+          subject: `🔔 New Chemical Enquiry: ${fullName} (${mobileNumber})`,
+          html: adminEmailHtml,
+        });
 
-      console.log("Admin notification sent successfully via Resend:", adminEmailResult);
-    } catch (adminErr) {
-      console.error("Failed to send admin notification via Resend:", adminErr);
-    }
+        console.log("Admin notification sent via Resend:", adminEmailResult);
+      } catch (adminErr) {
+        console.error("Failed to send admin notification via Resend:", adminErr);
+      }
 
-    // 5. Dispatch Confirmation Email to Customer (if valid recipient and domain allows)
-    let customerEmailResult = null;
-    try {
-      customerEmailResult = await resend.emails.send({
-        from: "UM Global Exim <onboarding@resend.dev>",
-        to: [email],
-        subject: "Thank You for Contacting UM Global Exim | Enquiry Received",
-        html: customerEmailHtml,
-      });
-
-      console.log("Customer confirmation sent successfully via Resend:", customerEmailResult);
-    } catch (customerErr) {
-      // Note: On free Resend test domains (onboarding@resend.dev), delivery to unverified external emails
-      // may require domain verification; we catch and log gracefully without blocking user submission.
-      console.warn("Notice: Customer confirmation email skipped or restricted by Resend sandbox domain:", customerErr.message);
+      // 6. Dispatch Confirmation Email to Customer
+      try {
+        await resend.emails.send({
+          from: "UM Global Exim <onboarding@resend.dev>",
+          to: [email],
+          subject: "Thank You for Contacting UM Global Exim | Enquiry Received",
+          html: customerEmailHtml,
+        });
+      } catch (customerErr) {
+        console.warn("Customer confirmation email skipped or restricted:", customerErr.message);
+      }
     }
 
     return NextResponse.json(
@@ -277,6 +277,7 @@ export async function POST(request) {
         success: true,
         message:
           "Thank you for contacting UM Global Exim! Your enquiry has been received and our export team will contact you shortly.",
+        enquiryId: savedEnquiry?.id,
         adminNotified: Boolean(adminEmailResult?.data?.id),
         timestamp: new Date().toISOString(),
       },

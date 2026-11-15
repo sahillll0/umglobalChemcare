@@ -9,14 +9,14 @@ const DATA_DIR = path.join(process.cwd(), "data");
 const FILE_PATH = path.join(DATA_DIR, "enquiries.json");
 
 /* ------------------------------------------------------------------ */
-/* MongoDB backend                                                     */
+/* Doc Mapper                                                         */
 /* ------------------------------------------------------------------ */
 
 function mapDoc(d) {
   if (!d) return null;
   return {
-    id: d._id || d.id,
-    createdAt: d.createdAt ? new Date(d.createdAt).toISOString() : null,
+    id: String(d._id || d.id),
+    createdAt: d.createdAt ? new Date(d.createdAt).toISOString() : new Date().toISOString(),
     status: d.status || "pending",
     fullName: d.fullName || "",
     mobileNumber: d.mobileNumber || "",
@@ -29,10 +29,13 @@ function mapDoc(d) {
   };
 }
 
-async function mongoAddEnquiry(data) {
+/* ------------------------------------------------------------------ */
+/* MongoDB Backend                                                    */
+/* ------------------------------------------------------------------ */
+
+async function mongoAddEnquiry(data, id) {
   const col = await getCollection();
   if (!col) return null;
-  const id = crypto.randomUUID();
   const doc = {
     _id: id,
     createdAt: new Date(),
@@ -97,7 +100,7 @@ async function mongoDeleteEnquiry(id) {
 }
 
 /* ------------------------------------------------------------------ */
-/* JSON-file backend (local storage / fallback)                       */
+/* Local JSON File Backend                                            */
 /* ------------------------------------------------------------------ */
 
 async function ensureStore() {
@@ -118,7 +121,7 @@ async function readEnquiries() {
   try {
     const raw = await fs.readFile(FILE_PATH, "utf8");
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.isArray(parsed) ? parsed.map(mapDoc).filter(Boolean) : [];
   } catch {
     return [];
   }
@@ -133,10 +136,10 @@ async function writeEnquiries(enquiries) {
   }
 }
 
-async function fileAddEnquiry(data) {
+async function fileAddEnquiry(data, id) {
   const enquiries = await readEnquiries();
   const enquiry = {
-    id: crypto.randomUUID(),
+    id: id,
     createdAt: new Date().toISOString(),
     status: "pending",
     fullName: data.fullName,
@@ -193,39 +196,96 @@ async function fileDeleteEnquiry(id) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Public API (resilient multi-tier persistence)                       */
+/* Public API (unified dual-write & unified retrieval)                */
 /* ------------------------------------------------------------------ */
 
 export async function addEnquiry(data) {
+  const id = data.id || crypto.randomUUID();
+  let savedDoc = null;
+
+  // 1. Try MongoDB
   if (isMongoConfigured()) {
     try {
-      const res = await mongoAddEnquiry(data);
-      if (res) {
-        // Also persist to local file in background if possible for backup
-        fileAddEnquiry(data).catch(() => {});
-        return res;
-      }
+      savedDoc = await mongoAddEnquiry(data, id);
     } catch (err) {
-      console.warn("MongoDB addEnquiry error, falling back to file store:", err.message);
+      console.warn("MongoDB addEnquiry error:", err.message);
     }
   }
-  return fileAddEnquiry(data);
+
+  // 2. Dual-write to file store as well (ensures backup & local visibility)
+  try {
+    const fileDoc = await fileAddEnquiry(data, id);
+    if (!savedDoc) savedDoc = fileDoc;
+  } catch (err) {
+    console.warn("File addEnquiry error:", err.message);
+  }
+
+  return (
+    savedDoc || {
+      id,
+      createdAt: new Date().toISOString(),
+      status: "pending",
+      fullName: data.fullName,
+      mobileNumber: data.mobileNumber,
+      email: data.email,
+      address: data.address,
+      message: data.message,
+    }
+  );
 }
 
 export async function listEnquiries() {
+  let mongoDocs = [];
+  let fileDocs = [];
+
+  // Query MongoDB
   if (isMongoConfigured()) {
     try {
       const res = await mongoListEnquiries();
-      if (res && res.length > 0) return res;
-      // If mongo collection is empty, check file store to merge or display
-      const fileDocs = await fileListEnquiries();
-      if (res && res.length === 0 && fileDocs.length > 0) return fileDocs;
-      if (res) return res;
+      if (Array.isArray(res)) mongoDocs = res;
     } catch (err) {
-      console.warn("MongoDB listEnquiries error, falling back to file store:", err.message);
+      console.warn("MongoDB listEnquiries error:", err.message);
     }
   }
-  return fileListEnquiries();
+
+  // Query File store
+  try {
+    fileDocs = (await fileListEnquiries()) || [];
+  } catch (err) {
+    console.warn("File listEnquiries error:", err.message);
+  }
+
+  // Merge both sources by ID
+  const map = new Map();
+  for (const d of [...mongoDocs, ...fileDocs]) {
+    if (d && d.id && !map.has(d.id)) {
+      map.set(d.id, d);
+    }
+  }
+
+  const all = Array.from(map.values());
+  // Sort latest first
+  all.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+  // Deduplicate dual-write entries that share the same customer, message, and timestamp within 10s
+  const unique = [];
+  for (const item of all) {
+    const isDup = unique.some((existing) => {
+      const sameContent =
+        existing.fullName === item.fullName &&
+        existing.email === item.email &&
+        existing.message === item.message;
+      if (!sameContent) return false;
+      const tDiff = Math.abs(
+        new Date(existing.createdAt || 0).getTime() -
+          new Date(item.createdAt || 0).getTime()
+      );
+      return tDiff < 10000;
+    });
+    if (!isDup) unique.push(item);
+  }
+
+  return unique;
 }
 
 export async function getEnquiry(id) {
@@ -234,46 +294,65 @@ export async function getEnquiry(id) {
       const res = await mongoGetEnquiry(id);
       if (res) return res;
     } catch (err) {
-      console.warn("MongoDB getEnquiry error, checking file store:", err.message);
+      console.warn("MongoDB getEnquiry error:", err.message);
     }
   }
   return fileGetEnquiry(id);
 }
 
 export async function updateEnquiryStatus(id, status) {
+  let updated = null;
   if (isMongoConfigured()) {
     try {
-      const res = await mongoUpdateEnquiryStatus(id, status);
-      if (res) return res;
+      updated = await mongoUpdateEnquiryStatus(id, status);
     } catch (err) {
       console.warn("MongoDB updateEnquiryStatus error:", err.message);
     }
   }
-  return fileUpdateEnquiryStatus(id, status);
+  try {
+    const fUpdated = await fileUpdateEnquiryStatus(id, status);
+    if (!updated) updated = fUpdated;
+  } catch (err) {
+    console.warn("File updateEnquiryStatus error:", err.message);
+  }
+  return updated;
 }
 
 export async function markEnquiryReplied(id) {
+  let updated = null;
   if (isMongoConfigured()) {
     try {
-      const res = await mongoMarkEnquiryReplied(id);
-      if (res) return res;
+      updated = await mongoMarkEnquiryReplied(id);
     } catch (err) {
       console.warn("MongoDB markEnquiryReplied error:", err.message);
     }
   }
-  return fileMarkEnquiryReplied(id);
+  try {
+    const fUpdated = await fileMarkEnquiryReplied(id);
+    if (!updated) updated = fUpdated;
+  } catch (err) {
+    console.warn("File markEnquiryReplied error:", err.message);
+  }
+  return updated;
 }
 
 export async function deleteEnquiry(id) {
+  let deleted = false;
   if (isMongoConfigured()) {
     try {
       const res = await mongoDeleteEnquiry(id);
-      if (res) return res;
+      if (res) deleted = true;
     } catch (err) {
       console.warn("MongoDB deleteEnquiry error:", err.message);
     }
   }
-  return fileDeleteEnquiry(id);
+  try {
+    const res = await fileDeleteEnquiry(id);
+    if (res) deleted = true;
+  } catch (err) {
+    console.warn("File deleteEnquiry error:", err.message);
+  }
+  return deleted;
 }
 
 export function computeStats(enquiries) {

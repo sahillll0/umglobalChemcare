@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
+  Database,
   Inbox,
   Loader2,
   LogOut,
@@ -11,6 +12,7 @@ import {
   MapPin,
   MessageCircle,
   Phone,
+  RefreshCw,
   Send,
   ShieldCheck,
   Trash2,
@@ -111,6 +113,9 @@ export default function AdminPage() {
   const [search, setSearch] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
   const [notice, setNotice] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const [storageBackend, setStorageBackend] = useState("");
+  const [lastUpdated, setLastUpdated] = useState("");
 
   // reply modal state
   const [replyTo, setReplyTo] = useState(null);
@@ -119,14 +124,33 @@ export default function AdminPage() {
   const [sending, setSending] = useState(false);
   const [replyError, setReplyError] = useState("");
 
-  const load = useCallback(async () => {
-    const res = await fetch("/api/admin/enquiries", { cache: "no-store" });
-    if (res.status === 401) {
-      router.replace("/admin/login");
-      return;
+  const load = useCallback(async (isManual = false) => {
+    if (isManual) setRefreshing(true);
+    try {
+      const res = await fetch(`/api/admin/enquiries?_t=${Date.now()}`, {
+        cache: "no-store",
+      });
+      if (res.status === 401) {
+        router.replace("/admin/login");
+        return;
+      }
+      const data = await res.json();
+      if (data?.success) {
+        setEnquiries(data.enquiries || []);
+        if (data.storage) setStorageBackend(data.storage);
+        setLastUpdated(
+          new Date().toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          })
+        );
+      }
+    } catch {
+      if (isManual) setNotice("Failed to refresh enquiries.");
+    } finally {
+      if (isManual) setRefreshing(false);
     }
-    const data = await res.json();
-    if (data?.success) setEnquiries(data.enquiries || []);
   }, [router]);
 
   useEffect(() => {
@@ -146,6 +170,14 @@ export default function AdminPage() {
       }
     })();
   }, [load, router]);
+
+  // Live background polling: automatically check for new enquiries every 10 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      load(false);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, [load]);
 
   useEffect(() => {
     const s = {
@@ -306,13 +338,30 @@ export default function AdminPage() {
               <p className="text-xs text-slate-400">Admin Dashboard</p>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
-          >
-            <LogOut className="h-4 w-4" />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            {storageBackend && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {storageBackend}
+              </span>
+            )}
+            <button
+              onClick={() => load(true)}
+              disabled={refreshing}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
+              title="Click to refresh enquiries now"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin text-blue-400" : ""}`} />
+              <span className="hidden sm:inline">{refreshing ? "Checking..." : "Refresh"}</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -322,6 +371,11 @@ export default function AdminPage() {
             <h1 className="text-2xl font-bold text-slate-900">Customer Enquiries</h1>
             <p className="mt-1 text-sm text-slate-500">
               Review submissions, update status, and reply to customers.
+              {lastUpdated && (
+                <span className="ml-2 text-xs text-slate-400">
+                  (Auto-updates every 10s · Last updated: {lastUpdated})
+                </span>
+              )}
             </p>
           </div>
         </div>

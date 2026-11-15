@@ -1,5 +1,6 @@
 import { isAuthenticated } from "@/lib/auth";
 import { listEnquiries, computeStats } from "@/lib/store";
+import { isMongoConfigured } from "@/lib/mongo";
 
 export async function GET() {
   if (!(await isAuthenticated())) {
@@ -11,5 +12,13 @@ export async function GET() {
 
   const enquiries = await listEnquiries();
   const stats = computeStats(enquiries);
-  return Response.json({ success: true, enquiries, stats });
+  const mongoActive = isMongoConfigured();
+
+  return Response.json({
+    success: true,
+    enquiries,
+    stats,
+    storage: mongoActive ? "MongoDB Atlas" : "Local Storage",
+    lastUpdated: new Date().toISOString(),
+  });
 }

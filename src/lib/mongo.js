@@ -1,43 +1,43 @@
 import { MongoClient } from "mongodb";
 
 const rawUri = (process.env.MONGODB_URL || "").trim();
-const dbName = (process.env.MONGODB_DB || "umglobal").trim();
+const configuredDbName = (process.env.MONGODB_DB || "umglobal").trim();
 
 let clientPromise = null;
 
-function withTimeout(promise, ms = 2500) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error(`MongoDB connection timed out after ${ms}ms`)), ms)
-    ),
-  ]);
-}
+function getClientPromise() {
+  if (!rawUri) return null;
 
-if (rawUri) {
-  // Use global client promise across dev and production to reuse connection pool
-  // and prevent exhausting Atlas connection limits or spinning on cold starts.
   if (!global._mongoClientPromise) {
     const client = new MongoClient(rawUri, {
-      serverSelectionTimeoutMS: 2500,
-      connectTimeoutMS: 2500,
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 8000,
       maxPoolSize: 10,
     });
     global._mongoClientPromise = client.connect().catch((err) => {
       console.warn("MongoDB Atlas connection attempt failed:", err.message);
+      // Reset so next request can retry instead of being stuck on null
       global._mongoClientPromise = null;
-      return null;
+      throw err;
     });
   }
-  clientPromise = global._mongoClientPromise;
+
+  return global._mongoClientPromise;
 }
 
 export async function getCollection(name = "enquiries") {
-  if (!clientPromise) return null;
+  if (!rawUri) return null;
+
   try {
-    const client = await withTimeout(clientPromise, 2500);
+    const promise = getClientPromise();
+    if (!promise) return null;
+
+    const client = await promise;
     if (!client) return null;
-    return client.db(dbName).collection(name);
+
+    // Use configured dbName, or default to umglobal
+    const db = client.db(configuredDbName);
+    return db.collection(name);
   } catch (err) {
     console.warn("MongoDB getCollection failed:", err.message);
     return null;
