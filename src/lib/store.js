@@ -264,28 +264,9 @@ export async function listEnquiries() {
   }
 
   const all = Array.from(map.values());
-  // Sort latest first
   all.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
-  // Deduplicate dual-write entries that share the same customer, message, and timestamp within 10s
-  const unique = [];
-  for (const item of all) {
-    const isDup = unique.some((existing) => {
-      const sameContent =
-        existing.fullName === item.fullName &&
-        existing.email === item.email &&
-        existing.message === item.message;
-      if (!sameContent) return false;
-      const tDiff = Math.abs(
-        new Date(existing.createdAt || 0).getTime() -
-          new Date(item.createdAt || 0).getTime()
-      );
-      return tDiff < 10000;
-    });
-    if (!isDup) unique.push(item);
-  }
-
-  return unique;
+  return all;
 }
 
 export async function getEnquiry(id) {
